@@ -1,0 +1,7 @@
+D <- read.delim("horse_data23.txt")
+print(D)
+par(mfrow = c(1, 3))
+boxplot(D[D$lameLeg == "none", "A"], D[D$lameLeg != "none", "A"], col = c("red", "blue"))
+boxplot(D[D$lameLeg == "none", "S"], D[D$lameLeg != "none", "S"], col = c("red", "blue"))
+boxplot(D[D$lameLeg == "none", "W"], D[D$lameLeg != "none", "W"], col = c("red", "blue"))
+legend(1, 95, legend = c("No lameness", "Lame"))

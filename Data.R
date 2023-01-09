@@ -7,6 +7,7 @@ boxplot(D[D$lameLeg == "none", "W"], D[D$lameLeg != "none", "W"], col = c("red",
 legend(1, 95, legend = c("No lameness", "Lame"))
 
 # If horse has a significant effect on the symmetry scores
+data.horse <- D
 L_A <- lm(A ~ horse * lameLeg, data = data.horse)
 anova(L_A)
 

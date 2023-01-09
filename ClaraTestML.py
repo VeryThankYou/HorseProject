@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
 
 df = pd.read_csv("horse_data23.txt", sep = "\t")
 print(np.shape(df))
@@ -50,7 +51,7 @@ plt.legend(handles=legend_elements)
 plt.show()
 
 
-# Prepare data for KNN
+# Prepare data for KNN (AW)
 X_AW = np.transpose(np.array([df["A"], df["W"]]))
 X_PC34 = np.transpose(np.array([df["pc3"], df["pc4"]]))
 y = df["lameLeg"]
@@ -58,33 +59,52 @@ ydict = {"none": 1, "left:hind": 2, "left:fore": 3, "right:hind": 4, "right:fore
 yreal = np.empty((len(y), 1))
 for i, e in enumerate(y):
     yreal[i] = int(ydict[e])
-print(yreal)
+#print(yreal)
 
 kf = KFold(n_splits=5, shuffle = True)
-print("lol")
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
 
+acc_AW = []
 
 for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
-    print("lol")
     X_train = X_AW[train_index,:]
     y_train = yreal[train_index]
     
     X_test = X_AW[test_index,:]
     y_test = yreal[test_index]
-    print("lol")
+    
+    knn_model = KNeighborsClassifier(n_neighbors=5)
+    knn_model.fit(X_train, y_train)
+    
+    test_preds = knn_model.predict(X_test)
+    accuracy = accuracy_score(y_test, test_preds)
+    
+    acc_AW.append(accuracy)
+    
+
+print("############################")
+
+acc_PC34 = []
+
+for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
+    X_train = X_PC34[train_index,:]
+    y_train = yreal[train_index]
+    
+    X_test = X_PC34[test_index,:]
+    y_test = yreal[test_index]
+    
     knn_model = KNeighborsClassifier(n_neighbors=3)
     knn_model.fit(X_train, y_train)
-    print("lol")
-    # MÅSKE VIRKER DEN IKKE MED ORD - SKAL LAVES OM TIL TAL ELLER 1-out-of-K
+    
     test_preds = knn_model.predict(X_test)
-    mse = mean_squared_error(y_test, test_preds)
-    print(mse)
+    accuracy = accuracy_score(y_test, test_preds)
+
+    acc_PC34.append(accuracy)
     
     
-    
-    
+print(np.mean(acc_AW))
+print(np.mean(acc_PC34))
     
     
     

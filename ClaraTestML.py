@@ -61,6 +61,8 @@ for i, e in enumerate(y):
     yreal[i] = int(ydict[e])
 #print(yreal)
 
+complexity = [2, 3, 5, 7, 10]
+
 kf = KFold(n_splits=5, shuffle = True)
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
@@ -74,7 +76,7 @@ for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
     X_test = X_AW[test_index,:]
     y_test = yreal[test_index]
     
-    knn_model = KNeighborsClassifier(n_neighbors=5)
+    knn_model = KNeighborsClassifier(n_neighbors=complexity[i])
     knn_model.fit(X_train, y_train)
     
     test_preds = knn_model.predict(X_test)
@@ -94,7 +96,7 @@ for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
     X_test = X_PC34[test_index,:]
     y_test = yreal[test_index]
     
-    knn_model = KNeighborsClassifier(n_neighbors=3)
+    knn_model = KNeighborsClassifier(n_neighbors=complexity[i])
     knn_model.fit(X_train, y_train)
     
     test_preds = knn_model.predict(X_test)
@@ -105,7 +107,9 @@ for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
     
 print(np.mean(acc_AW))
 print(np.mean(acc_PC34))
-    
+
+print(acc_AW)
+print(acc_PC34)
     
     
     

@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import mean_squared_error
 
 df = pd.read_csv("horse_data23.txt", sep = "\t")
@@ -54,6 +54,11 @@ plt.show()
 X_AW = np.transpose(np.array([df["A"], df["W"]]))
 X_PC34 = np.transpose(np.array([df["pc3"], df["pc4"]]))
 y = df["lameLeg"]
+ydict = {"none": 1, "left:hind": 2, "left:fore": 3, "right:hind": 4, "right:fore": 5}
+yreal = np.empty((len(y), 1))
+for i, e in enumerate(y):
+    yreal[i] = int(ydict[e])
+print(yreal)
 
 kf = KFold(n_splits=5, shuffle = True)
 print("lol")
@@ -61,15 +66,15 @@ print("lol")
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
 
 
-for i, (train_index, test_index) in enumerate(kf.split(X_AW,y)):
+for i, (train_index, test_index) in enumerate(kf.split(X_AW, yreal)):
     print("lol")
     X_train = X_AW[train_index,:]
-    y_train = y.iloc[train_index]
+    y_train = yreal[train_index]
     
     X_test = X_AW[test_index,:]
-    y_test = y.iloc[test_index]
+    y_test = yreal[test_index]
     print("lol")
-    knn_model = KNeighborsRegressor(n_neighbors=3)
+    knn_model = KNeighborsClassifier(n_neighbors=3)
     knn_model.fit(X_train, y_train)
     print("lol")
     # MÅSKE VIRKER DEN IKKE MED ORD - SKAL LAVES OM TIL TAL ELLER 1-out-of-K

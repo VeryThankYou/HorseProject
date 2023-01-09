@@ -58,7 +58,7 @@ for i, e in enumerate(y):
     yreal[i] = int(ydict[e])
 #print(yreal)
 
-k1 = 5
+k1 = 10
 k2 = 5
 
 kf1 = KFold(n_splits=k1, shuffle = True)

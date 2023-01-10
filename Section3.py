@@ -17,48 +17,17 @@ from sklearn.metrics import accuracy_score
 df = pd.read_csv("horse_data23.txt", sep = "\t")
 
 
-# Prepare label/color
-label_to_color = {'none': 'blue', 'right:hind': 'red', 'right:fore': 'green', 'left:hind': 'yellow', 'left:fore': 'purple'}
-colors = [label_to_color[label] for label in df["lameLeg"]]
-
-
-
-# Scatter plot A/W and lameness
-plt.scatter(df["A"], df["W"], c = colors)
-
-# Extra
-plt.title('Scatter Plot')
-plt.xlabel('A')
-plt.ylabel('W')
-legend_elements = [plt.scatter([], [], c=color, label=label) for label, color in label_to_color.items()]
-plt.legend(handles=legend_elements)
-plt.show()
-
-
-# Scatter plot PC3/PC4 and lameness
-# Prepare A/W data
-plt.scatter(df["pc3"],df["pc4"], c = colors)
-
-# Extra
-plt.title('Scatter Plot')
-plt.xlabel('PC3')
-plt.ylabel('PC4')
-legend_elements = [plt.scatter([], [], c=color, label=label) for label, color in label_to_color.items()]
-plt.legend(handles=legend_elements)
-plt.show()
-
-
 # Prepare data for KNN (AW)
 X_AW = np.transpose(np.array([df["A"], df["W"]]))
 X_PC34 = np.transpose(np.array([df["pc3"], df["pc4"]]))
 y = df["lameLeg"]
-ydict = {"none": 1, "left:hind": 2, "left:fore": 3, "right:hind": 4, "right:fore": 5}
+ydict = {"none": 1, "left:hind": 2, "left:fore": 3, "right:hind": 3, "right:fore": 2}
 yreal = np.empty((len(y)))
 for i, e in enumerate(y):
     yreal[i] = int(ydict[e])
 #print(yreal)
 
-k1 = 10
+k1 = 5
 k2 = 5
 
 kf1 = KFold(n_splits=k1, shuffle = True)
@@ -71,6 +40,7 @@ acc_AW = []
 
 accuracy_outerAW = np.zeros((2,k1))
 accuracy_outerPC34 = np.zeros((2,k1))
+accuracy_outerBL = np.zeros((1,k1))
 
 for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     
@@ -95,6 +65,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
         
         X_trainPC34 = X_parPC34[train_index,:]
         X_valPC34 = X_parPC34[val_index,:]
+
         
         
         for k in range(len(complexity)):
@@ -134,12 +105,18 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     accuracy = accuracy_score(y_test, test_predsPC34)
     accuracy_outerPC34[0,i] = best_k
     accuracy_outerPC34[1,i] = accuracy
+
+    # Baseline
+    choice = np.bincount(y_par.astype(int)).argmax()
+    BL_pred = np.full(len(y_test), choice)
+    BL_accuracy = accuracy_score(y_test.astype(int), BL_pred)
+    accuracy_outerBL[0, i] = BL_accuracy
             
             
             
     
 print(accuracy_outerAW)
 print(accuracy_outerPC34)
-    
+print(accuracy_outerBL)
     
     

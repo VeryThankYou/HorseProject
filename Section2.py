@@ -181,9 +181,17 @@ print(accuracy_outerBL)
 mean_acc_AW = np.mean(accuracy_outerAW[1,:])
 mean_acc_PC34 = np.mean(accuracy_outerPC34[1,:])
 mean_acc_Both = np.mean(accuracy_outerBoth[1,:])
+mean_acc_BL = np.mean(accuracy_outerBL)
 
 # For McNemar
 print(mean_acc_AW)
 print(mean_acc_PC34)
 print(mean_acc_Both)
-    
+print(mean_acc_BL)
+
+print()
+d = {"Baseline": [mean_acc_BL], "A/W": [mean_acc_AW], "PC3/PC4": [mean_acc_PC34], "A/W/PC3/PC4": [mean_acc_Both]}
+df = pd.DataFrame(d)
+print(df)
+
+df.to_csv("mean_acc.csv")

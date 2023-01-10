@@ -155,3 +155,9 @@ print(mean_acc_AW)
 print(mean_acc_PC34)
 print(mean_acc_Both)
 print(mean_acc_BL)
+
+d = {"Baseline": [mean_acc_BL], "A/W": [mean_acc_AW], "PC3/PC4": [mean_acc_PC34], "A/W/PC3/PC4": [mean_acc_Both]}
+df = pd.DataFrame(d)
+print(df)
+
+df.to_csv("mean_acc_section3.csv")

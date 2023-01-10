@@ -181,7 +181,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     all_test_predsBL = np.append(all_test_predsBL, BL_pred, axis = 0)
     BL_accuracy = accuracy_score(y_test.astype(int), BL_pred)
     accuracy_outerBL[0, i] = BL_accuracy
-        
+    
     # True class
     all_test_true = np.append(all_test_true, y_test, axis = 0)
             

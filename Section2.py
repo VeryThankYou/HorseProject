@@ -179,6 +179,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     choice = np.bincount(y_par.astype(int)).argmax()
     BL_pred = np.full(len(y_test), choice)
     all_test_predsBL = np.append(all_test_predsBL, BL_pred, axis = 0)
+    
     BL_accuracy = accuracy_score(y_test.astype(int), BL_pred)
     accuracy_outerBL[0, i] = BL_accuracy
     
@@ -191,7 +192,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
 d = {"True": all_test_true, "Baseline": all_test_predsBL, "AW": all_test_predsAW,"PC3PC4": all_test_predsPC34, "Both": all_test_predsBoth}
 df = pd.DataFrame(d)
 print(df)
-df.to_csv("predictions.csv")
+df.to_csv("predictions_section2.csv")
 
 # Accuracy
 

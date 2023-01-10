@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan 10 10:36:26 2023
+Created on Tue Jan 10 12:52:41 2023
 
 @author: clarasofiechristiansen
 """
@@ -9,7 +9,7 @@ Created on Tue Jan 10 10:36:26 2023
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("predictions_section2.csv")
+df = pd.read_csv("predictions_section3.csv")
 
 
 d = {}
@@ -39,4 +39,4 @@ for i in range(1,len(names)):
 print(d)
 
 for i in d:
-    d[i].to_csv(i + ".csv")
+    d[i].to_csv(i + "_3"+ ".csv")

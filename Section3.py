@@ -44,6 +44,13 @@ accuracy_outerPC34 = np.zeros((2,k1))
 accuracy_outerBoth = np.zeros((2,k1))
 accuracy_outerBL = np.zeros((1,k1))
 
+
+all_test_predsBL = np.array([])
+all_test_predsAW = np.array([])
+all_test_predsPC34 = np.array([])
+all_test_predsBoth = np.array([])
+all_test_true = np.array([])
+
 for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     
     y_par = yreal[par_index]
@@ -103,6 +110,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     knn_modelAW = KNeighborsClassifier(n_neighbors=best_k)
     knn_modelAW.fit(X_parAW, y_par)
     test_predsAW = knn_modelAW.predict(X_testAW)
+    all_test_predsAW = np.append(all_test_predsAW, test_predsAW, axis = 0)
     
     accuracy = accuracy_score(y_test, test_predsAW)
     accuracy_outerAW[0,i] = best_k
@@ -116,6 +124,8 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     knn_modelPC34 = KNeighborsClassifier(n_neighbors=best_k)
     knn_modelPC34.fit(X_parPC34, y_par)
     test_predsPC34 = knn_modelPC34.predict(X_testPC34)
+    all_test_predsPC34 = np.append(all_test_predsPC34, test_predsPC34, axis = 0)
+    
     accuracy = accuracy_score(y_test, test_predsPC34)
     accuracy_outerPC34[0,i] = best_k
     accuracy_outerPC34[1,i] = accuracy
@@ -127,6 +137,8 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     knn_modelBoth = KNeighborsClassifier(n_neighbors=best_k)
     knn_modelBoth.fit(X_parBoth, y_par)
     test_predsBoth = knn_modelBoth.predict(X_testBoth)
+    all_test_predsBoth = np.append(all_test_predsBoth, test_predsBoth, axis = 0)
+    
     accuracy = accuracy_score(y_test, test_predsBoth)
     accuracy_outerBoth[0,i] = best_k
     accuracy_outerBoth[1,i] = accuracy
@@ -134,11 +146,20 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     # Baseline
     choice = np.bincount(y_par.astype(int)).argmax()
     BL_pred = np.full(len(y_test), choice)
+    all_test_predsBL = np.append(all_test_predsBL, BL_pred, axis = 0)
+    
     BL_accuracy = accuracy_score(y_test.astype(int), BL_pred)
     accuracy_outerBL[0, i] = BL_accuracy
             
+    # True class
+    all_test_true = np.append(all_test_true, y_test, axis = 0)
             
-            
+# Predictions
+d = {"True": all_test_true, "Baseline": all_test_predsBL, "AW": all_test_predsAW,"PC3PC4": all_test_predsPC34, "Both": all_test_predsBoth}
+df = pd.DataFrame(d)
+print(df)
+df.to_csv("predictions_section3.csv")
+
     
 print(accuracy_outerAW)
 print(accuracy_outerPC34)

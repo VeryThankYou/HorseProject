@@ -168,5 +168,13 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
 print(accuracy_outerAW)
 print(accuracy_outerPC34)
 print(accuracy_outerBoth)
-    
+
+mean_acc_AW = np.mean(accuracy_outerAW[1,:])
+mean_acc_PC34 = np.mean(accuracy_outerPC34[1,:])
+mean_acc_Both = np.mean(accuracy_outerBoth[1,:])
+
+# For McNemar
+print(mean_acc_AW)
+print(mean_acc_PC34)
+print(mean_acc_Both)
     

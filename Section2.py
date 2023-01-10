@@ -188,7 +188,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
             
 
 # Predictions
-d = {"True": all_test_true, "Baseline": all_test_predsBL, "A/W": all_test_predsAW,"PC3/PC4": all_test_predsPC34, "A/W/PC3/PC4": all_test_predsBoth}
+d = {"True": all_test_true, "Baseline": all_test_predsBL, "AW": all_test_predsAW,"PC3PC4": all_test_predsPC34, "Both": all_test_predsBoth}
 df = pd.DataFrame(d)
 print(df)
 df.to_csv("predictions.csv")

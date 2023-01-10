@@ -72,6 +72,8 @@ complexity = [1, 3, 5, 7, 9]
 accuracy_outerAW = np.zeros((2,k1))
 accuracy_outerPC34 = np.zeros((2,k1))
 accuracy_outerBoth = np.zeros((2,k1))
+accuracy_outerBL = np.zeros((1,k1))
+
 
 for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     
@@ -161,6 +163,12 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     accuracy = accuracy_score(y_test, test_predsBoth)
     accuracy_outerBoth[0,i] = best_k
     accuracy_outerBoth[1,i] = accuracy
+
+    # Baseline
+    choice = np.bincount(y_par.astype(int)).argmax()
+    BL_pred = np.full(len(y_test), choice)
+    BL_accuracy = accuracy_score(y_test.astype(int), BL_pred)
+    accuracy_outerBL[0, i] = BL_accuracy
             
             
             
@@ -168,6 +176,7 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
 print(accuracy_outerAW)
 print(accuracy_outerPC34)
 print(accuracy_outerBoth)
+print(accuracy_outerBL)
 
 mean_acc_AW = np.mean(accuracy_outerAW[1,:])
 mean_acc_PC34 = np.mean(accuracy_outerPC34[1,:])

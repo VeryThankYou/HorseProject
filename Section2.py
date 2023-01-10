@@ -51,6 +51,7 @@ plt.show()
 # Prepare data for KNN (AW)
 X_AW = np.transpose(np.array([df["A"], df["W"]]))
 X_PC34 = np.transpose(np.array([df["pc3"], df["pc4"]]))
+X_Both = np.transpose(np.array([df["A"], df["W"], df["pc3"], df["pc4"]]))
 y = df["lameLeg"]
 ydict = {"none": 1, "left:hind": 2, "left:fore": 3, "right:hind": 4, "right:fore": 5}
 yreal = np.empty((len(y)))
@@ -67,10 +68,10 @@ complexity = [1, 3, 5, 7, 9]
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
 
-acc_AW = []
 
 accuracy_outerAW = np.zeros((2,k1))
 accuracy_outerPC34 = np.zeros((2,k1))
+accuracy_outerBoth = np.zeros((2,k1))
 
 for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     
@@ -83,8 +84,12 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     X_parPC34 = X_PC34[par_index,:]
     X_testPC34 = X_PC34[test_index,:]
     
+    X_parBoth = X_Both[par_index,:]
+    X_testBoth = X_Both[test_index,:]
+    
     accuracy_innerAW = np.zeros((k2,len(complexity)))
     accuracy_innerPC34 = np.zeros((k2,len(complexity)))
+    accuracy_innerBoth = np.zeros((k2,len(complexity)))
     
     for j, (train_index, val_index) in enumerate(kf2.split(X_parAW, y_par)):
         y_train = y_par[train_index]
@@ -95,6 +100,9 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
         
         X_trainPC34 = X_parPC34[train_index,:]
         X_valPC34 = X_parPC34[val_index,:]
+        
+        X_trainBoth = X_parBoth[train_index,:]
+        X_valBoth = X_parBoth[val_index,:]
         
         
         for k in range(len(complexity)):
@@ -110,6 +118,13 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
             test_predsPC34 = knn_modelPC34.predict(X_valPC34)
             accuracy = accuracy_score(y_val, test_predsPC34)
             accuracy_innerPC34[j,k] = accuracy
+            
+            
+            knn_modelBoth = KNeighborsClassifier(n_neighbors=complexity[k])
+            knn_modelBoth.fit(X_trainBoth, y_train)
+            test_predsBoth = knn_modelBoth.predict(X_valBoth)
+            accuracy = accuracy_score(y_val, test_predsBoth)
+            accuracy_innerBoth[j,k] = accuracy
         
     # AW
     mean_accuracy = np.mean(accuracy_innerAW, axis = 0)
@@ -134,12 +149,24 @@ for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
     accuracy = accuracy_score(y_test, test_predsPC34)
     accuracy_outerPC34[0,i] = best_k
     accuracy_outerPC34[1,i] = accuracy
+    
+    
+    # Both
+    mean_accuracy = np.mean(accuracy_innerBoth, axis = 0)
+    best_k = complexity[np.argmax(mean_accuracy)]
+    
+    knn_modelBoth = KNeighborsClassifier(n_neighbors=best_k)
+    knn_modelBoth.fit(X_parBoth, y_par)
+    test_predsBoth = knn_modelBoth.predict(X_testBoth)
+    accuracy = accuracy_score(y_test, test_predsBoth)
+    accuracy_outerBoth[0,i] = best_k
+    accuracy_outerBoth[1,i] = accuracy
             
             
             
     
 print(accuracy_outerAW)
 print(accuracy_outerPC34)
-    
+print(accuracy_outerBoth)
     
     

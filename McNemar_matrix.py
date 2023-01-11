@@ -9,7 +9,7 @@ Created on Tue Jan 10 10:36:26 2023
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("predictions_section2.csv")
+df = pd.read_csv("predictions_section2_horseout.csv")
 
 
 d = {}

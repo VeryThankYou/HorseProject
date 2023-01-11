@@ -14,6 +14,7 @@ print(D[D$horse == c("B5", "B9"), ])
 print(var.test(A ~ horse, data = D[D$horse == c("B5", "B9"), ]))
 print(var.test(S ~ horse, data = D[D$horse == c("B4", "B6"), ]))
 print(var.test(W ~ horse, data = D[D$horse == c("B1", "B7"), ]))
+print(var.test(W ~ lameLeg, data = D[D$lameLeg == c("none", "right:fore"), ]))
 
 print(kruskal.test(A ~ horse, data = D))
 print(kruskal.test(S ~ horse, data = D))
@@ -32,3 +33,6 @@ print(anova(L_W))
 
 L_W2 <- lm(W ~ horse + lameLeg, data = D)
 print(anova(L_W2))
+
+L_W3 <- lm(W ~ horse * lameLeg, data = D)
+print(anova(L_W3))

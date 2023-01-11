@@ -12,11 +12,14 @@ index_list=list(df.values.tolist())
 for i in range(len(horses)):
     horse="B"+str(horses[i])
     templist=list()
+    onehorse=list()
     for k in range(len(df)):
         if(index_list[k][1]!=(horse)):
             templist.append(index_list[k])
-    print(templist)
-    print(i)
+        else:
+            onehorse.append(index_list[k])
+    templist=pd.DataFrame(templist,columns=["experiment","horse","lameLeg","lameSide","lameForeHind","A","S","W","pc1","pc2","pc3","pc4"])
+    onehorse=pd.DataFrame(templist,columns=["experiment","horse","lameLeg","lameSide","lameForeHind","A","S","W","pc1","pc2","pc3","pc4"])
 
     
     

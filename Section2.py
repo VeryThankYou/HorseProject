@@ -82,7 +82,7 @@ all_test_true = np.array([])
 
 
 for i, (par_index, test_index) in enumerate(kf1.split(X_AW, yreal)):
-    
+    print(par_index)
     y_par = yreal[par_index]
     y_test = yreal[test_index]
     

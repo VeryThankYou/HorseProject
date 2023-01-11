@@ -17,15 +17,18 @@ print(var.test(W ~ horse, data = D[D$horse == c("B1", "B7"), ]))
 
 print(kruskal.test(A ~ horse, data = D))
 print(kruskal.test(S ~ horse, data = D))
-print(kruskal.test(W ~ horse, data = D))
+#print(kruskal.test(W ~ horse, data = D))
 
 
 # If horse has a significant effect on the symmetry scores
 L_A <- lm(A ~ horse * lameLeg, data = D)
-print(anova(L_A))
+#print(anova(L_A))
 
 L_S <- lm(S ~ horse * lameLeg, data = D)
-print(anova(L_S))
+#print(anova(L_S))
 
-L_W <- lm(W ~ horse * lameLeg, data = D)
+L_W <- lm(W ~ horse, data = D)
 print(anova(L_W))
+
+L_W2 <- lm(W ~ horse + lameLeg, data = D)
+print(anova(L_W2))

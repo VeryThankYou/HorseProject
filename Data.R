@@ -10,14 +10,22 @@ par(mfrow = c(3, 1))
 boxplot(D$A ~ D$horse, col = c("red", "blue", "green", "yellow", "white"), horizontal = TRUE)
 boxplot(D$S ~ D$horse, col = c("red", "blue", "green", "yellow", "white"), horizontal = TRUE)
 boxplot(D$W ~ D$horse, col = c("red", "blue", "green", "yellow", "white"), horizontal = TRUE)
+print(D[D$horse == c("B5", "B9"), ])
+print(var.test(A ~ horse, data = D[D$horse == c("B5", "B9"), ]))
+print(var.test(S ~ horse, data = D[D$horse == c("B4", "B6"), ]))
+print(var.test(W ~ horse, data = D[D$horse == c("B1", "B7"), ]))
+
+print(kruskal.test(A ~ horse, data = D))
+print(kruskal.test(S ~ horse, data = D))
+print(kruskal.test(W ~ horse, data = D))
 
 
 # If horse has a significant effect on the symmetry scores
 L_A <- lm(A ~ horse * lameLeg, data = D)
-anova(L_A)
+print(anova(L_A))
 
 L_S <- lm(S ~ horse * lameLeg, data = D)
-anova(L_S)
+print(anova(L_S))
 
 L_W <- lm(W ~ horse * lameLeg, data = D)
-anova(L_W)
+print(anova(L_W))

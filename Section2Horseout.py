@@ -7,13 +7,14 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import accuracy_score
 from mlxtend.plotting import plot_decision_regions
 
+
 data = pd.read_csv("horse_data23.txt", sep = "\t")
 horses=[1,2,3,4,5,6,7,9]
 
 k1 = len(horses)
 k2 = 5
 
-kf2 = KFold(n_splits=k2, shuffle = True)
+kf2 = KFold(n_splits=k2, shuffle = True, random_state = 10)
 complexity = [1, 3, 5, 7, 9]
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
@@ -31,8 +32,6 @@ all_test_predsPC34 = np.array([])
 all_test_predsBoth = np.array([])
 all_test_true = np.array([])
 
-
-fig, ax = plt.subplots()
 
 
 index_list=list(data.values.tolist())
@@ -122,28 +121,6 @@ for i in range(len(horses)):
     accuracy_outerAW[0,i] = best_k
     accuracy_outerAW[1,i] = accuracy
     
-    #colors = {1: ["blue", "none"], 2: ["red", "left:hind"], 3: ["green","left:fore"], 4: ["yellow","right:hind"], 5: ["orange", "right:fore"]}
-    colors = {1: "blue", 2: "red", 3: "green", 4: "yellow", 5: "orange"}
-    #legend = inv_map = {v: k for k, v in colors.items()}
-    legends_alone = [k for k, v in colors.items()]
-    #colours_alone = [v for k, v in colors.items()]
-    #y_val_color = []
-    #y_val_legend = []
-    #for x, e in enumerate(y_val):
-    #    y_val_color.append(colors[e])
-    #    y_val_legend.append(colors[e])
-    
-    for i in range(1,6):
-        x = X_valAW[[j for j, x in enumerate(y_val) if x == i],0]
-        y = X_valAW[[j for j, x in enumerate(y_val) if x == i],1]
-        ax.scatter(x,y, c=colors[i], label = i)
-        
-    
-    #plt.scatter(X_valAW[:,0],X_valAW[:,1], cmap = legends_alone)
-    #plt.xlabel("A")
-    #plt.ylabel("W")
-    #plt.legend(legends_alone)
-    
     
     # PC34
     mean_accuracy = np.mean(accuracy_innerPC34, axis = 0)
@@ -184,16 +161,7 @@ for i in range(len(horses)):
     all_test_true = np.append(all_test_true, y_test, axis = 0)
             
             
-for i in range(1,6):
-    x = X_AW[[j for j, x in enumerate(all_test_predsAW) if x == i],0]
-    y = X_AW[[j for j, x in enumerate(all_test_predsAW) if x == i],1]
-    ax.scatter(x,y, c=colors[i], label = i)
-   
-ax.legend()
-ax.grid(True)
-
-plt.show()
-    
+  
 # Predictions
 d = {"True": all_test_true, "Baseline": all_test_predsBL, "AW": all_test_predsAW,"PC3PC4": all_test_predsPC34, "Both": all_test_predsBoth}
 df = pd.DataFrame(d)

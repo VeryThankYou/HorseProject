@@ -5,7 +5,6 @@ from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import accuracy_score
-from mlxtend.plotting import plot_decision_regions
 
 
 data = pd.read_csv("horse_data23.txt", sep = "\t")
@@ -168,23 +167,10 @@ df = pd.DataFrame(d)
 print(df)
 df.to_csv("predictions_section2_horseout.csv")
 
-<<<<<<< Updated upstream
 # Accuracy
 d1 = {"Baseline": np.mean(accuracy_outerBL), "AW": np.mean(accuracy_outerAW[1,:]),"PC3PC4": np.mean(accuracy_outerPC34[1,:]), "Both": np.mean(accuracy_outerBoth[1,:])}
 df1 = pd.DataFrame(d1, index = [0])
 print(df1)
 df1.to_csv("accuracy_section2_horseout.csv")
-
-=======
-
-# Plot decision boundaries
-label_to_color = {'none': 'blue', 'right:hind': 'red', 'right:fore': 'green', 'left:hind': 'yellow', 'left:fore': 'purple'}
-colors = [label_to_color[label] for label in df["lameLeg"]]
-
-# Scatter plot A/W and lameness
-plt.scatter(data["A"], data["W"], c = colors)
->>>>>>> Stashed changes
-    
-
 
     

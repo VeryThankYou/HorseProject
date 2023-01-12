@@ -15,6 +15,7 @@ for(e in names)
     print(e)
     print(mcnemar.test(D))
     d_section2[e] = mcnemar.test(D)$p.value
+    
 }
 
 print("----- Section 3 -----")
@@ -42,3 +43,14 @@ for_export3 <- signif(t(data.frame(d_section3)),3)
 
 write.csv(for_export3, "pvalues_mcnemar_3.csv")
 
+
+# Accuracy (round to 3 significant figures)
+acc_dataframe2 <- read.csv("accuracy_section2_horseout.csv", header = T)
+acc_dataframe2 <- signif(acc_dataframe2,3)*100
+acc_dataframe2[] <- lapply(acc_dataframe2, paste0, '%')
+write.csv(acc_dataframe2, "accuracy_procent_section2_horseout.csv")
+
+acc_dataframe3 <- read.csv("accuracy_section3_horseout.csv", header = T)
+acc_dataframe3 <- signif(acc_dataframe3,3)*100
+acc_dataframe3[] <- lapply(acc_dataframe3, paste0, '%')
+write.csv(acc_dataframe3, "accuracy_procent_section3_horseout.csv")

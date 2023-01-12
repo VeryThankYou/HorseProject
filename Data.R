@@ -20,6 +20,9 @@ print(kruskal.test(A ~ horse, data = D))
 print(kruskal.test(S ~ horse, data = D))
 #print(kruskal.test(W ~ horse, data = D))
 
+table(D$lameLeg, D$horse)
+summary(lm(lameLeg ~ horse, data = D))
+
 
 # If horse has a significant effect on the symmetry scores
 L_A <- lm(A ~ horse * lameLeg, data = D)

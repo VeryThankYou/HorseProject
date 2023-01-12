@@ -175,8 +175,11 @@ df = pd.DataFrame(d)
 print(df)
 df.to_csv("predictions_section3_horseout.csv")
 
-    
-    
+# Accuracy
+d1 = {"Baseline": np.mean(accuracy_outerBL), "AW": np.mean(accuracy_outerAW[1,:]),"PC3PC4": np.mean(accuracy_outerPC34[1,:]), "Both": np.mean(accuracy_outerBoth[1,:])}
+df1 = pd.DataFrame(d1, index = [0])
+print(df1)
+df1.to_csv("accuracy_section3_horseout.csv")
 
 
     

@@ -5,7 +5,7 @@ from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import accuracy_score
-
+from mlxtend.plotting import plot_decision_regions
 
 data = pd.read_csv("horse_data23.txt", sep = "\t")
 horses=[1,2,3,4,5,6,7,9]
@@ -18,6 +18,7 @@ complexity = [1, 3, 5, 7, 9]
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation
 
+X_AW = np.transpose(np.array([data["A"], data["W"]]))
 
 accuracy_outerAW = np.zeros((2,k1))
 accuracy_outerPC34 = np.zeros((2,k1))
@@ -31,7 +32,7 @@ all_test_predsBoth = np.array([])
 all_test_true = np.array([])
 
 
-
+fig, ax = plt.subplots()
 
 
 index_list=list(data.values.tolist())
@@ -116,9 +117,32 @@ for i in range(len(horses)):
     test_predsAW = knn_modelAW.predict(X_testAW)
     all_test_predsAW = np.append(all_test_predsAW, test_predsAW, axis = 0)
     
+    
     accuracy = accuracy_score(y_test, test_predsAW)
     accuracy_outerAW[0,i] = best_k
     accuracy_outerAW[1,i] = accuracy
+    
+    #colors = {1: ["blue", "none"], 2: ["red", "left:hind"], 3: ["green","left:fore"], 4: ["yellow","right:hind"], 5: ["orange", "right:fore"]}
+    colors = {1: "blue", 2: "red", 3: "green", 4: "yellow", 5: "orange"}
+    #legend = inv_map = {v: k for k, v in colors.items()}
+    legends_alone = [k for k, v in colors.items()]
+    #colours_alone = [v for k, v in colors.items()]
+    #y_val_color = []
+    #y_val_legend = []
+    #for x, e in enumerate(y_val):
+    #    y_val_color.append(colors[e])
+    #    y_val_legend.append(colors[e])
+    
+    for i in range(1,6):
+        x = X_valAW[[j for j, x in enumerate(y_val) if x == i],0]
+        y = X_valAW[[j for j, x in enumerate(y_val) if x == i],1]
+        ax.scatter(x,y, c=colors[i], label = i)
+        
+    
+    #plt.scatter(X_valAW[:,0],X_valAW[:,1], cmap = legends_alone)
+    #plt.xlabel("A")
+    #plt.ylabel("W")
+    #plt.legend(legends_alone)
     
     
     # PC34
@@ -160,14 +184,28 @@ for i in range(len(horses)):
     all_test_true = np.append(all_test_true, y_test, axis = 0)
             
             
+for i in range(1,6):
+    x = X_AW[[j for j, x in enumerate(all_test_predsAW) if x == i],0]
+    y = X_AW[[j for j, x in enumerate(all_test_predsAW) if x == i],1]
+    ax.scatter(x,y, c=colors[i], label = i)
+   
+ax.legend()
+ax.grid(True)
 
+plt.show()
+    
 # Predictions
 d = {"True": all_test_true, "Baseline": all_test_predsBL, "AW": all_test_predsAW,"PC3PC4": all_test_predsPC34, "Both": all_test_predsBoth}
 df = pd.DataFrame(d)
 print(df)
 df.to_csv("predictions_section2_horseout.csv")
 
-    
+# Accuracy
+d1 = {"Baseline": np.mean(accuracy_outerBL), "AW": np.mean(accuracy_outerAW[1,:]),"PC3PC4": np.mean(accuracy_outerPC34[1,:]), "Both": np.mean(accuracy_outerBoth[1,:])}
+df1 = pd.DataFrame(d1, index = [0])
+print(df1)
+df1.to_csv("accuracy_section2_horseout.csv")
+
     
 
 

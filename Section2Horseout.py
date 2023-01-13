@@ -13,7 +13,7 @@ horses=[1,2,3,4,5,6,7,9]
 k1 = len(horses)
 k2 = 5
 
-kf2 = KFold(n_splits=k2, shuffle = True, random_state = 10)
+kf2 = KFold(n_splits=k2, shuffle = True, random_state = 29)
 complexity = [1, 3, 5, 7, 9]
 
 # https://stackoverflow.com/questions/51852551/key-error-not-in-index-while-cross-validation

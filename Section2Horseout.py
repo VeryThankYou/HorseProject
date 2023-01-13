@@ -173,4 +173,35 @@ df1 = pd.DataFrame(d1, index = [0])
 print(df1)
 df1.to_csv("accuracy_section2_horseout.csv")
 
-    
+
+# Accuracy for collapse
+ydict = {1: 1, 2: 2, 3: 3, 4: 3, 5: 2}
+
+y_collapse = np.empty((len(all_test_true)))
+pred = np.empty((len(all_test_true), 4))
+
+for i, e in enumerate(all_test_true):
+    y_collapse[i] = int(ydict[e])
+
+for i, e in enumerate([all_test_predsBL, all_test_predsAW, all_test_predsPC34, all_test_predsBoth]):
+    for j in range(len(e)):
+        pred[j, i] = int(ydict[e[j]])
+
+# Predictions
+d2 = {"True": y_collapse, "Baseline": pred[:, 0], "AW": pred[:, 1],"PC3PC4": pred[:, 2], "Both": pred[:, 3]}
+df2 = pd.DataFrame(d2)
+print(df2)
+df2.to_csv("predictions_section2_horseout_collapse.csv")
+
+
+# Accuracy
+accuracy_all_BL = accuracy_score(y_collapse, pred[:, 0])
+accuracy_all_AW = accuracy_score(y_collapse, pred[:, 1])
+accuracy_all_PC3PC4 = accuracy_score(y_collapse, pred[:, 2])
+accuracy_all_BOTH = accuracy_score(y_collapse, pred[:, 3])
+
+
+d12 = {"Baseline": np.mean(accuracy_outerBL), "AW": accuracy_all_AW,"PC3PC4": accuracy_all_PC3PC4, "Both": accuracy_all_BOTH}
+df12 = pd.DataFrame(d12, index = [0])
+print(df12)
+df12.to_csv("accuracy_section2_horseout_collapse.csv")
